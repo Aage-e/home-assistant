@@ -1,0 +1,73 @@
+    binary_sensor.door_window_sensor_158d000233290c:
+      device-class: door
+    binary_sensor.noen_hjemme:
+      hidden: false
+    media_player.chromecast1271:
+      friendly_name: Saras cromecast
+      emulated_hue: false
+    sensor.dht_humiditysensor_filter:
+      friendly_name: Fuktighet stue
+    sensor.dht_tempsensor_filter:
+      friendly_name: Temperatur stue
+    sensor.dht_sensor_temperature:
+      friendly_name: Temperatur stue_ufiltrert
+    sensor.dht_sensor_humidity:
+      friendly_name: Fuktighet stue_ufiltrert
+    sensor.temp_temperature:
+      friendly_name: Temperatur
+    sensor.temp_humidity:
+      friendly_name: Fukt
+    sensor.temp_wind_direction:
+      friendly_name: Vindretning
+    sun.sun:
+      friendly_name: Nag/Natt
+    sensor.elspot_kwh:
+      friendly_name: Strømpris
+    sensor.esp1_energy:
+      friendly_name: Effektbruk
+    sensor.energy_hour_filter:
+      friendly_name: Snittforbruk siste døgn
+    sensor.esp1_energyBatt:
+      friendly_name: Batterimåler energi
+    sensor.temp_wind_speed:
+      friendly_name: Vindhastighet
+    sensor.temp_pressure:
+      friendly_name: Barometer
+    sensor.temp_cloudiness:
+      friendly_name: Pst overskyet
+    sensor.temp_symbol:
+      friendly_name: Værikon
+    sensor.Garagetemp:
+      friendly_name: Temperatur ute
+    sensor.Co2_Stue:
+      friendly_name: CO-nivå
+    sensor.sonoffTH1_temp:
+      friendly_name: Temperatur bordtennisrom
+    sensor.sonoffTH1_humidity:
+      friendly_name: Fuktighet bordtennisrom
+    sensor.Watertemp1:
+      friendly_name: Varmtvannstank topp
+    sensor.Watertemp2:
+      friendly_name: Varmtvannstank bunn
+    switch.Garage:
+      icon: mdi:garage
+    switch.Sonoff01:
+      friendly_name: Sofa-lampe
+    switch.Sonoff02:
+      friendly_name: Vinduslampe-wifi-issue
+    switch.Sonoff03:
+      friendly_name: Soveromslampe
+    switch.Sonoff04:
+      friendly_name: Vinduslampe
+    switch.Sonoff05:
+      friendly_name: Sonoff nr 5
+    switch.Sonoff06:
+      friendly_name: Sonoff nr 6
+    switch.Sonoff07:
+      friendly_name: Sonoff nr 7
+    switch.SonoffT1:
+      friendly_name: Varmeovn bordtennisrom
+    sensor.ruter__neste_avgang_mot_lillestrm:
+      friendly_name: Bussavg til Lillestrøm
+      
+     

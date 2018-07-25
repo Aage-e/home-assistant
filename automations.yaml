@@ -1,0 +1,18 @@
+- id: Solnedganga_automasjon
+  alias: Solnedgang automasjon
+  trigger:
+  - event: sunset
+    platform: sun
+  action:
+  - data:
+      entity_id: switch.sonoff04
+    service: homeassistant.turn_on
+- id: Soloppgang_automasjon
+  alias: Soloppgang automasjon
+  trigger:
+  - event: sunrise
+    platform: sun
+  action:
+  - data:
+      entity_id: switch.sonoff04
+    service: homeassistant.turn_off

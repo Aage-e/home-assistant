@@ -1,0 +1,503 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Snekkerstuveien 53
+  # Location required to calculate the time the sun rises and sets
+  latitude: 60.016674
+  longitude: 11.051897
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 0
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Oslo
+  # Customization file
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+# introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+device_tracker:
+  - platform: asuswrt
+    host: 192.168.1.1
+    username: !secret router_user
+    password: !secret router_password
+    protocol: telnet
+    interval_seconds: 10
+    track_new_devices: true
+    
+mqtt:
+  broker: 192.168.1.208
+  port: 1883
+  username: mq_user
+  password: !secret mqtt_password
+  discovery: True
+  discovery_prefix: homeassistant
+
+xiaomi_aqara:
+  discovery_retry: 10
+  gateways:
+    - key: !secret xiaomi_key
+
+http:
+  api_password: !secret http_password
+  base_url: eilbor.duckdns.org:8123
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+  #ip_ban_enabled: True
+  #login_attempts_threshold: 5
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+
+#tradfri:
+#  host: 192.168.1.239
+#api_key: !secret tradfri_key
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time ESP er microcontrollere...
+history:
+  exclude:
+    entities:
+#     - device_tracker.esp_3dee8c
+#     - device_tracker.esp_38f397
+#     - device_tracker.esp_4e4ef5
+     - sensor.last_boot
+     - sensor.since_last_boot
+
+# View all events in a logbook
+logbook:
+
+python_script:
+
+# hvor lenge holdes events i logging-databasen.
+recorder:
+  purge_interval: 7
+  purge_keep_days: 30
+  exclude:
+    entities:
+     - sensor.last_boot
+     - sensor.since_last_boot
+
+# Track the sun
+sun:
+
+emulated_hue:
+  host_ip: 192.168.1.208
+  listen_port: 8300
+  off_maps_to_on_domains:
+    - script
+  expose_by_default: true
+  exposed_domains:
+    - switch
+    - script
+
+history_graph:
+  gr1:
+    name: Effektgraf
+    entities:
+      - sensor.esp1_energy
+      - sensor.energy_hour_filter
+    hours_to_show: 72
+    refresh: 600
+    
+binary_sensor:
+  - platform: mqtt
+    name: "Window Contact Sensor"
+    state_topic: "homeassistant/window/contact"
+    payload_on: "ON"
+    payload_off: "OFF"
+    availability_topic: "homeassistant/window/availability"
+    payload_available: "online"
+    payload_not_available: "offline"
+    qos: 0
+    device_class: opening
+    value_template: '{{ value.x }}'
+    
+  - platform: template
+    sensors:
+      noen_hjemme:
+        value_template: >-
+          {{ is_state('device_tracker.samsungs7aae', 'home')
+             or is_state('device_tracker.gunnhiliniphone', 'home')
+             or is_state('device_tracker.galaxys6', 'home')
+             or is_state('device_tracker.sarasiniphone2', 'home')
+             or is_state('device_tracker.martinsiniphone', 'home') 
+             or is_state('device_tracker.samsunggalaxys7', 'home') 
+             or is_state('device_tracker.hannasiniphone', 'home') }}
+
+  - platform: template
+    sensors:
+      hoyt_co_nivaa_stue:
+        friendly_name: "CO-alarm"
+        value_template: "{{ states('sensor.Co2_Stue')|int > 480 }}"
+          
+  - platform: template
+    sensors:
+      hoyt_stromforbruk:
+        friendly_name: "Hoyt stromforbruk"
+        value_template: "{{ states('sensor.esp1_energy')|float > 12.0 }}"
+          
+  - platform: template
+    sensors:
+      tom_varmtvannstank:
+        friendly_name: "Tom varmtvannstank"
+        value_template: "{{ (states('sensor.Watertemp1')|float < 45.0) and (states('sensor.Watertemp1')|float > 1.0) }}"
+
+input_boolean:
+  activate_automation:
+    name: Aktiver automasjon
+    initial: on
+    icon: mdi:nfc-tap
+
+input_datetime:
+  both_date_and_time:
+    name: Input with both date and time
+    has_date: true
+    has_time: true
+
+input_number:
+  slider1:
+    name: Slider
+    initial: 30
+    min: -20
+    max: 35
+    step: 1
+  box1:
+    name: Numeric Input Box
+    initial: 30
+    min: -20
+    max: 35
+    step: 1
+    mode: box
+
+input_select:
+  who_cooks:
+    name: Who cooks today
+    options:
+     - Paulus
+     - Anne Therese
+    initial: Anne Therese
+    icon: mdi:panda
+input_text:
+  text1:
+    name: Text 1
+    initial: Some Text
+  text2:
+    name: Text 2
+    min: 8
+    max: 40
+  text3:
+    name: Text 3
+    pattern: '[a-fA-F0-9]*'
+
+# Weather prediction
+sensor:
+  - platform: nordpool
+    currency: 'NOK'
+    region: 'Oslo'
+    name: "Elspot kWh"
+    unit_of_measurement: "Øre"
+
+  - platform: ruter
+    stopid: 2310193
+    destination: 'Lillestrøm'
+#    stopid: 2190255
+#    destination: 'Oslo bussterminal' #Optional
+
+  - platform: dht
+    sensor: DHT22
+    pin: 18
+    temperature_offset: 0.0
+    humidity_offset: -0.0
+    monitored_conditions:
+      - temperature
+      - humidity
+
+  - platform: yr
+    name: temp
+    forecast: 24
+    monitored_conditions:
+      - temperature
+      - symbol
+#      - precipitation
+      - windSpeed
+      - pressure
+      - windDirection
+      - humidity
+#      - fog
+      - cloudiness
+#      - lowClouds
+#      - mediumClouds
+#      - highClouds
+#      - dewpointTemperature  
+
+# SPEEDTEST FOR Å VITE NETTVERKSHASTIGHET, utføres kl 00:30, 06:30,.....
+  - platform: speedtest
+    minute: 30
+    hour:
+      - 0
+      - 6
+      - 12
+      - 18
+      - 20
+      - 22
+    monitored_conditions:
+      - ping
+      - download
+      - upload
+      
+ # OVERVAAKING AV HOME-ASSISTANT SIN STATUS     
+  - platform: systemmonitor
+    resources:
+      - type: disk_use
+        arg: /home
+      - type: disk_free
+        arg: /home
+      - type: processor_use
+      - type: memory_free
+      - type: last_boot
+      - type: since_last_boot
+   
+  - platform: mqtt
+    state_topic: "Garage/door/temp"
+    name: 'Garagetemp'
+    unit_of_measurement: '°C'
+    value_template: '{{ value_json.temperatur }}'
+      
+  - platform: mqtt
+    state_topic: "WEMOS1/SENSORS"
+    name: 'Co2_Stue'
+    unit_of_measurement: 'ppm'
+    value_template: '{{ value_json.CO2 }}'
+  
+  - platform: mqtt
+    name: "sonoffTH1_temp"
+    state_topic: "tele/sonoffTH1/SENSOR"
+    value_template: "{{ value_json.AM2301.Temperature }}"
+    unit_of_measurement: "°C"
+
+  - platform: mqtt
+    name: "sonoffTH1_humidity"
+    state_topic: "tele/sonoffTH1/SENSOR"
+    value_template: '{{ value_json.AM2301.Humidity }}'
+    unit_of_measurement: "%"
+
+  - platform: mqtt
+    name: "esp1_energy"
+    state_topic: "electricity/sensors"
+    value_template: '{{ value_json.Engergy }}'
+    unit_of_measurement: "kW"
+
+  - platform: mqtt
+    name: "esp1_energyBatt"
+    state_topic: "electricity/sensors"
+    value_template: '{{ value_json.Voltage }}'
+    unit_of_measurement: "Volt"
+
+  - platform: mqtt
+    state_topic: "WEMOS2/SENSORS"
+    name: 'Watertemp1'
+    unit_of_measurement: '°C'
+    value_template: '{{ value_json.Temp1 }}'
+      
+  - platform: mqtt
+    state_topic: "WEMOS2/SENSORS"
+    name: 'Watertemp2'
+    unit_of_measurement: '°C'
+    value_template: '{{ value_json.Temp2 }}'
+
+  - platform: filter
+    name: "dht_tempsensor_filter"
+    entity_id: sensor.dht_sensor_temperature
+    filters:
+      - filter: outlier
+        window_size: 4
+        radius: 1.5      
+
+  - platform: filter
+    name: "dht_humiditysensor_filter"
+    entity_id: sensor.dht_sensor_humidity
+    filters:
+      - filter: outlier
+        window_size: 4
+        radius: 1.5      
+
+  - platform: filter
+    name: "energy_hour_filter"
+    entity_id: sensor.esp1_energy
+    filters:
+      - filter: lowpass
+        window_size: 120
+        precision: 1     
+
+  - platform: template
+    sensors:
+      varmtvannstank_totaltemp:
+        friendly_name: "Varmtvannstank total"
+        value_template: "{% if (states('sensor.Watertemp1')|float > 1.0) and (states('sensor.Watertemp2')|float > 1.0) %}
+		{{ '%+.1f'|format((((states('sensor.Watertemp1')|float)*2.0) + ((states('sensor.Watertemp1')|float) *1.0 ))/3) }}
+		{% endif %}"
+        unit_of_measurement: '°C'
+          
+# Text to speech
+tts:
+  - platform: google
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+switch:
+  - platform: mqtt
+    name: "Sonoff01"
+    command_topic: "cmnd/sonoff01/power"
+    state_topic: "stat/sonoff01/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "Sonoff02"
+    command_topic: "cmnd/sonoff02/power"
+    state_topic: "stat/sonoff02/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "Sonoff03"
+    command_topic: "cmnd/sonoff03/power"
+    state_topic: "stat/sonoff03/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "Sonoff04"
+    command_topic: "cmnd/sonoff04/power"
+    state_topic: "stat/sonoff04/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "Sonoff05"
+    command_topic: "cmnd/sonoff05/power"
+    state_topic: "stat/sonoff05/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "Sonoff06"
+    command_topic: "cmnd/sonoff06/power"
+    state_topic: "stat/sonoff06/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "Sonoff07"
+    command_topic: "cmnd/sonoff07/power"
+    state_topic: "stat/sonoff07/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+  - platform: mqtt
+    name: "Garage"
+    command_topic: "Garage/door/cmd"
+    state_topic: "Garage/door/state"
+    qos: 1
+    payload_on: "OPEN"
+    payload_off: "CLOSE"
+    retain: true
+  - platform: mqtt
+    name: "SonoffT1"
+    command_topic: "cmnd/sonoffTH1/power"
+    state_topic: "stat/sonoffTH1/POWER"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    retain: true
+
+notify:
+  - name: pushbullet_notify
+    platform: pushbullet
+    api_key: !secret pushbullet_api
+    
+alert:
+  garage_door_open:
+    name: Garasjedør er åpen.
+    done_message: Garasjedør er lukket.
+    entity_id: switch.Garage
+    state: 'on'
+    repeat: 
+      - 10
+      - 30
+    can_acknowledge: True
+    skip_first: True
+    notifiers:
+      - pushbullet_notify
+      
+  high_co2_alert:
+    name: Høyt co-nivå.
+    done_message: Ok co-nivå.
+    entity_id: binary_sensor.hoyt_co_nivaa_stue
+    state: 'on'
+    repeat: 
+      - 10
+      - 30
+    can_acknowledge: True
+    skip_first: false
+    notifiers:
+      - pushbullet_notify
+      
+  high_electricity_alert:
+    name: Høyt strømforbruk.
+    done_message: Ok strømforbruk.
+    entity_id: binary_sensor.hoyt_stromforbruk
+    state: 'on'
+    repeat: 
+      - 10
+      - 30
+    can_acknowledge: True
+    skip_first: false
+    notifiers:
+      - pushbullet_notify
+      
+  tom_varmtvannstank_alert:
+    name: Varmtvannstank er tom.
+    done_message: Varmtvannstank er varm igjen.
+    entity_id: binary_sensor.tom_varmtvannstank
+    state: 'on'
+    repeat: 
+      - 30
+    can_acknowledge: True
+    skip_first: false
+    notifiers:
+      - pushbullet_notify
+      
+      
+      
+      
+    

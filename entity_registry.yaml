@@ -1,0 +1,65 @@
+media_player.chromecast1271:
+  config_entry_id:
+  name: Sara sin cromecast
+  platform: cast
+  unique_id: 62077cd4-884b-4cb8-7649-9ce3c7f9c850
+light.tradfri_group:
+  config_entry_id:
+  name:
+  platform: tradfri
+  unique_id: group-7e216152044000b6-131073
+light.tradfri_bulb_e27_cws_opal_600lm:
+  config_entry_id:
+  name: Gjesteromslampe
+  platform: tradfri
+  unique_id: light-7e216152044000b6-65537
+light.tradfri_group_2:
+  config_entry_id:
+  name:
+  platform: tradfri
+  unique_id: group-7e216152044000b6-131075
+light.tradfri_lys_2:
+  config_entry_id:
+  name:
+  platform: tradfri
+  unique_id: light-7e216152044000b6-65541
+light.tradfri_lys_1:
+  config_entry_id:
+  name: Spisestue 1
+  platform: tradfri
+  unique_id: light-7e216152044000b6-65542
+light.tradfri_group_3:
+  config_entry_id:
+  name:
+  platform: tradfri
+  unique_id: group-7e216152044000b6-131076
+light.tradfri_light7e216152044000b665543:
+  config_entry_id:
+  name: Spisestue 2
+  platform: tradfri
+  unique_id: light-7e216152044000b6-65543
+binary_sensor.motion_sensor_158d0001a92cca:
+  config_entry_id:
+  name: Stua
+  platform: xiaomi_aqara
+  unique_id: status158d0001a92cca
+light.gateway_light_7811dcdee4ba:
+  config_entry_id:
+  name:
+  platform: xiaomi_aqara
+  unique_id: rgb7811dcdee4ba
+sensor.illumination_7811dcdee4ba:
+  config_entry_id:
+  name:
+  platform: xiaomi_aqara
+  unique_id: illumination7811dcdee4ba
+binary_sensor.door_window_sensor_158d00023920d1:
+  config_entry_id:
+  name: Terassedør
+  platform: xiaomi_aqara
+  unique_id: status158d00023920d1
+binary_sensor.door_window_sensor_158d000233290c:
+  config_entry_id:
+  name: Ytterdør
+  platform: xiaomi_aqara
+  unique_id: status158d000233290c

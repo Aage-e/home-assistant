@@ -1,0 +1,137 @@
+default_view:
+  view: yes
+  icon: mdi:home
+  name: Oppstartsvindu
+  entities:
+    - sun.sun
+    - device_tracker.samsungs7aae
+    - device_tracker.gunnhiliniphone
+    - device_tracker.galaxys6
+    - device_tracker.sarasiniphone2
+    - device_tracker.martinsiniphone
+    - device_tracker.samsunggalaxys7
+    - device_tracker.hannasiniphone
+    - sensor.temp_wind_speed
+    - sensor.esp1_energy
+    - sensor.temp_temperature
+    - sensor.temp_humidity
+    - history_graph.Effektgraf
+    - group.LivingRoom
+    - group.GarageRoom
+    - group.BedRoom
+    - group.TableTennisRoom
+    - group.AllHouse
+    - sensor.elspot_kwh
+    - binary_sensor.door_window_sensor_158d000233290c
+    
+LivingRoom:
+  name: Stue
+  entities:
+    - switch.sonoff01
+    - switch.sonoff04
+    - light.tradfri_lys_1
+    - light.tradfri_light7e216152044000b665543
+    - sensor.Co2_Stue
+    - sensor.dht_tempsensor_filter
+    - sensor.dht_humiditysensor_filter
+
+
+TableTennisRoom:
+  name: Bordtennisrom
+  entities:
+    - sensor.sonoffTH1_temp
+    - sensor.sonoffTH1_humidity
+    - switch.SonoffT1
+
+AllHouse:
+  name: Hele huset
+  entities:
+    - sensor.Garagetemp
+#    - sensor.Garagetemp_filtered
+    - sensor.Watertemp1
+    - sensor.Watertemp2
+
+BedRoom:
+  name: Soverom
+  entities:
+    - switch.Sonoff03
+    
+GarageRoom:
+  name: Garasje
+  entities:
+    - switch.Garage
+
+Soverom_Sara:
+  name: Saras soverom
+  entities:
+    - media_player.chromecast1271
+    
+Oppstartsvindu_view:
+  name: Testvindu
+  icon: mdi:matrix
+  view: yes
+  entities:
+    - sun.sun
+    - sensor.temp_wind_direction
+    - sensor.temp_wind_speed
+    - sensor.temp_cloudiness
+    - sensor.energy_hour_filter
+    - binary_sensor.noen_hjemme
+    - group.Soverom_Sara
+    - sensor.esp1_energyBatt
+    - binary_sensor.hoyt_co_nivaa_stue
+    - binary_sensor.hoyt_stromforbruk
+    - binary_sensor.tom_varmtvannstank
+    - switch.Sonoff02
+    - switch.Sonoff05
+    - switch.Sonoff06
+    - switch.Sonoff07
+    - sensor.varmtvannstank_totaltemp
+    - group.Sensorgroup
+    - sensor.ruter__neste_avgang_mot_lillestrm
+    - input_boolean.activate_automation
+    - both_date_and_time.input_datetime
+    - input_number.slider1
+    - input_number.box1
+    - input_select.who_cooks
+    - input_text.text3
+    - binary_sensor.motion_sensor_158d0001a92cca
+    - binary_sensor.door_window_sensor_158d00023920d1
+   
+Sensorgroup:
+  name: Sensorer
+  entities:
+    - sensor.dht_sensor_temperature
+    - sensor.dht_sensor_humidity
+    - sensor.tradfri_remote_control
+    - light.tradfri_lys_2
+    - light.tradfri_group
+    - light.tradfri_group_2
+    - sensor.tradfri_motion_sensor
+
+
+Status_view:
+  icon: mdi:settings
+  name: System info
+  view: yes
+  entities:
+    - group.SystemFrame
+    - group.NetworkFrame
+
+NetworkFrame:
+  name: Nettverk info
+  entities:
+    - sensor.speedtest_download
+    - sensor.speedtest_upload
+    - sensor.speedtest_ping
+    
+SystemFrame:
+  name: System info
+  entities:
+    - sensor.processor_use
+    - sensor.memory_free
+    - sensor.disk_free_home
+    - sensor.disk_use_home
+    - sensor.last_boot
+    - sensor.since_last_boot
+
